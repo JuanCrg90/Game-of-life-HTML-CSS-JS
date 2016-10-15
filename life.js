@@ -67,16 +67,40 @@
 
 })();
 
-var game = new Life([
-  [0, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0],
-  [0, 0, 1, 0, 0],
-  [0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0]
-]);
+(function() {
+  var _ = self.LifeView = function(table, size) {
+    this.grid = table;
+    this.size = size;
 
-console.log(game + '');
+    this.createGrid();
+  };
 
-game.next();
+  _.prototype = {
+    createGrid: function() {
+      var fragment = document.createDocumentFragment();
+      this.grid.innerHTML = '';
+      this.checkboxes = [];
 
-console.log(game + '');
+      for(var y = 0; y < this.size; y++) {
+        var row = document.createElement('tr');
+        this.checkboxes[y] = [];
+        for(var x = 0; x < this.size; x++) {
+          var cell = document.createElement('td');
+          var checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          this.checkboxes[y][x] = checkbox;
+
+          cell.appendChild(checkbox);
+          row.appendChild(cell);
+        }
+          fragment.appendChild(row);
+      }
+
+      this.grid.appendChild(fragment);
+    }
+  };
+
+
+})();
+
+var lifeView = new LifeView(document.getElementById('grid'), 12);
