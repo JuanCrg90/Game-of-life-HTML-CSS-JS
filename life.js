@@ -86,6 +86,7 @@
         this.checkboxes[y] = [];
         for(var x = 0; x < this.size; x++) {
           var cell = document.createElement('td');
+          cell.className = 'cell';
           var checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           this.checkboxes[y][x] = checkbox;
@@ -103,4 +104,3 @@
 
 })();
 
-var lifeView = new LifeView(document.getElementById('grid'), 12);
