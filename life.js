@@ -98,6 +98,7 @@ function $(selector, container) {
           var checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
           this.checkboxes[y][x] = checkbox;
+          checkbox.coords = [y , x];
 
           cell.appendChild(checkbox);
           row.appendChild(cell);
@@ -109,7 +110,40 @@ function $(selector, container) {
         if(event.target.nodeName.toLowerCase() === 'input') {
           me.started = false;
         }
-      })
+      });
+
+      this.grid.addEventListener('keyup', function(event) {
+        var checkbox = event.target; 
+        if(event.target.nodeName.toLowerCase() === 'input') {
+          var coords = checkbox.coords;
+          var y = coords[0];
+          var x = coords[1];
+
+          switch(event.keyCode) {
+            case 37: //Left
+              if(x > 0) {
+                me.checkboxes[y][x - 1].focus();
+              }
+              break;
+            case 38: // UP
+              if(y > 0){
+                me.checkboxes[y - 1][x].focus();
+              }
+              break;
+            case 39: //Right
+              if(x < me.size - 1) {
+                me.checkboxes[y][x + 1].focus();
+              }
+              break;
+            case 40: //Down
+              if(y < me.size - 1) {
+              me.checkboxes[y + 1][x].focus();
+              }
+              break;
+         }
+
+        }
+      });
 
       this.grid.appendChild(fragment);
     },
