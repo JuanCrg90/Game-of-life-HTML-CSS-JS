@@ -190,8 +190,6 @@ function $(selector, container) {
 
 })();
 
-var lifeView = new LifeView(document.getElementById('grid'), 12);
-
 (function() {
 
   var buttons = {
@@ -215,3 +213,6 @@ var lifeView = new LifeView(document.getElementById('grid'), 12);
 
   });
 })();
+
+
+var lifeView = new LifeView(document.getElementById('grid'), 25);
