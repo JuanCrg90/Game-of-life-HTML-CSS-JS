@@ -49,9 +49,22 @@ button, .button {
   font-weight: bold;
   color: black;
   outline: none;
+  cursor: pointer;
 }
 
-button:active {
+button:enable:active,
+.button:active,
+input[type="checkbox"]:checked + label.button {
   background-image: none;
-  box-shadow: 0 .05em .2em rgba(0,0,0,.5) inset;
+  box-shadow: 0 .1em .2em rgba(0,0,0,.5) inset;
+}
+
+button:disabled {
+  background-color: hsl(247,8%,61%);
+  cursor: not-allowed;
+}
+
+#autoplay {
+  position: absolute;
+  clip: rect(0,0,0,0);
 }
