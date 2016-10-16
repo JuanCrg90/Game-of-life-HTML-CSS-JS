@@ -1,3 +1,8 @@
+function $(selector, container) {
+  return (container || document).querySelector(selector);
+}
+
+
 (function() {
 
   var _ = self.Life = function(seed) {
@@ -98,9 +103,39 @@
       }
 
       this.grid.appendChild(fragment);
+    },
+
+    get boardArray() {
+      return this.checkboxes.map(function(row) {
+        return row.map(function(checkbox) {
+          return +checkbox.checked;
+        });
+      });
+    },
+
+    play: function() {
+      this.game = new Life(this.boardArray);
+    },
+
+    next: function() {
+      this.game.next();
+
+      var board = this.game.board;
+
+      for(var y = 0; y < this.size; y++) {
+        for(var x = 0; x < this.size; x++) {
+          this.checkboxes[y][x].checked = !!board[y][x];
+        }
+      }
+
     }
   };
 
 
 })();
 
+var lifeView = new LifeView(document.getElementById('grid'), 12);
+
+$('button.play').addEventListener('click', function(event) {
+  lifeView.next();
+});
