@@ -76,12 +76,15 @@ function $(selector, container) {
   var _ = self.LifeView = function(table, size) {
     this.grid = table;
     this.size = size;
+    this.started = false;
+    this.autoplay = false;
 
     this.createGrid();
   };
 
   _.prototype = {
     createGrid: function() {
+      var me = this;
       var fragment = document.createDocumentFragment();
       this.grid.innerHTML = '';
       this.checkboxes = [];
@@ -99,8 +102,14 @@ function $(selector, container) {
           cell.appendChild(checkbox);
           row.appendChild(cell);
         }
-          fragment.appendChild(row);
+        fragment.appendChild(row);
       }
+
+      this.grid.addEventListener('change', function(event) {
+        if(event.target.nodeName.toLowerCase() === 'input') {
+          me.started = false;
+        }
+      })
 
       this.grid.appendChild(fragment);
     },
@@ -115,9 +124,16 @@ function $(selector, container) {
 
     play: function() {
       this.game = new Life(this.boardArray);
+      this.started = true;
     },
 
     next: function() {
+      var me = this;
+
+      if(!this.started || this.game) {
+        this.play();
+      }
+
       this.game.next();
 
       var board = this.game.board;
@@ -128,6 +144,12 @@ function $(selector, container) {
         }
       }
 
+      if(this.autoplay) {
+        this.timer = setTimeout(function () {
+          me.next();
+        }, 1000);
+      }
+
     }
   };
 
@@ -136,6 +158,25 @@ function $(selector, container) {
 
 var lifeView = new LifeView(document.getElementById('grid'), 12);
 
-$('button.play').addEventListener('click', function(event) {
-  lifeView.next();
-});
+(function() {
+
+  var buttons = {
+    next: $('button.next')
+  }
+
+
+  buttons.next.addEventListener('click', function(event) {
+    lifeView.next();
+  });
+
+  $("#autoplay").addEventListener('change', function() {
+    buttons.next.textContent = this.checked? 'Start': 'Next';
+
+    lifeView.autoplay = this.checked;
+
+    if(!this.checked) {
+      clearTimeout(lifeView.timer);
+    }
+
+  });
+})();
